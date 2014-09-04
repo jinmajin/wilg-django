@@ -1,0 +1,26 @@
+{% extends "content.html" %}
+
+
+{% block title %}
+{% endblock %}
+
+{% block main_content %}
+
+{% regroup object_list|dictsort:"year" by year as member_list %}
+{% for year in member_list reversed %}
+<ul id="profile_list">
+<span class="year_header">Class of {{ year.grouper }}</span><br/>
+  {% for profile in year.list %}
+  <li>
+  <img src="{{ profile.get_mugshot_url }}" /><br/><br/>
+  {{ profile.user.first_name }} {{profile.user.last_name}}<br/>
+  {% for major in profile.major_set.all %} 
+    {{major.degree}}, {{major.number}}{% if major.modifier %}-{{major.modifier}} {% endif %}<br/>
+  {% endfor %}
+  </li>
+  {% endfor %}
+
+</ul>
+{% endfor %}
+
+{% endblock %}

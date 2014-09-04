@@ -1,0 +1,22 @@
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+	 <div class="header2 col-md-7 sidebar">
+	  <div id="wilg_large" class="text-center">
+	   <a href={% url "index" %} >wilg</a>
+	  </div>
+	  <br/>
+	  <div id="navigation" class="col-md-offset-3">
+	    {% load base_extras %}
+	    <ul>
+	    <li><a class={% navactive request 'about' %} href='{% url "index"%}about'>about</a></li>
+	    <li><a class={% navactive request 'rush' %} href='{% url "index"%}rush'>rush</a></li>
+	    <li><a class={% navactive request 'house' %} href='{% url "index"%}house'>house</a></li>
+	    <li><a class={% navactive request 'members' %} href='{% url "index"%}members'>members</a></li>
+	    <li><a class={% navactive request 'alumnae' %} href='{% url "index"%}alumnae'>alumnae</a></li>
+	    <li><a class={% navactive request 'events' %} href='{% url "index"%}events'>events</a></li>
+	    <li><a class={% navactive request 'contact' %} href='{% url "index"%}contact'>contact</a></li>
+	    </ul>
+	  </div>
+	</div>

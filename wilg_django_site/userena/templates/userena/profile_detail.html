@@ -1,0 +1,69 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}{% blocktrans with profile.user.get_full_name as username %}{{ username }}{% endblocktrans %}{% endblock %}
+
+{% block main_content %}
+{% include 'userena/profile_nav.html' %}
+
+    <div id="details">
+      {% block profile_details %}
+        <img class="mugshot" src="{{ profile.get_mugshot_url }}" alt="{% trans "Your mugshot" %}" />
+        <dl>
+          {% block profile_definition_list %}
+	    {% if profile.major_set.exists %}
+              <dt>{% trans "Degrees" %}</dt>
+	      {% for major in profile.major_set.all %} 
+	      <dd>{{major.degree}}, {{major.number}}{% if major.modifier %}-{{major.modifier}} {% endif %}<dd/>
+	      {% endfor %}
+	    {% endif %}
+	    {% if profile.minorconc_set.exists %}
+	      {% for minor in profile.minorconc_set.all %} 
+              <dt>{{ minor.minortype }}</dt>
+	      <dd>{{ minor.get_area_display }}<dd/>
+	      {% endfor %}
+	    {% endif %}
+	{% if profile.school != "MIT" %}
+		<dt> School </dt>
+		<dd>{{profile.school}}</dd>
+		{% endif %}
+	    {% if profile.execrole_set.exists %}
+              <dt>Exec positions</dt>
+	      {% for role in profile.execrole_set.all %} 
+	      <dd>{{role.get_title_display}}: {{role.get_semester_display}} {{ role.year }}<dd/>
+	      {% endfor %}
+	    {% endif %}
+	    {% if profile.location_set.exists %}
+	      {% for loc in profile.location_set.all %} 
+	      {% if loc.hometown %}<dt>Hometown</dt>
+	      <dd>{{ loc.city }}{% if loc.state %}, {{loc.state}}{% endif%}{% if loc.country %}, {{loc.country|title }}{% endif %}<dd/>{% endif %}
+	      {% endfor %}
+	    {% endif %}
+            {% if profile.oww %}
+		<dt>{% trans "Old wise one" %}</dt>
+		<dd><a href="{% url 'userena_profile_detail' profile.oww.user.username %}">{{ profile.oww.user.get_full_name }}</a><dd/>
+            {% endif %}
+            {% if profile.get_ydos %}
+		<dt>{% trans "Young dumb ones" %}</dt>
+	      {% for ydo in profile.get_ydos.all %} 
+	      	<dd><a href="{% url 'userena_profile_detail' ydo.user.username %}">{{ ydo.user.get_full_name }}</a><dd/>
+	      {% endfor %}
+            {% endif %}
+
+	{% if user.is_authenticated %}
+            {% if profile.user.email and not hide_email %}
+              <dt>{% trans "Email" %}</dt>
+              <dd>{{ profile.user.email }}</dd>
+            {% endif %}
+            {% if profile.blurb %}
+              <dt>{% trans "Ask me about..." %}</dt>
+              <dd>{{ profile.blurb }}</dd>
+            {% endif %}
+	{% endif %}
+          {% endblock %}
+        </dl>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

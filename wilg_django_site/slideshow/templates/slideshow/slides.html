@@ -1,0 +1,71 @@
+{% load static %}
+
+{% if slides %}
+    <script>
+$(function(){
+  $("#slides").slidesjs({
+    height:650,
+    play: {
+      active: true,
+        // [boolean] Generate the play and stop buttons.
+        // You cannot use your own buttons. Sorry.
+      effect: "fade",
+        // [string] Can be either "slide" or "fade".
+      interval: 5000,
+        // [number] Time spent on each slide in milliseconds. 
+      auto:true,
+        // [boolean] Start playing the slideshow on load.
+      swap: true,
+        // [boolean] show/hide stop and play buttons
+      pauseOnHover: false,
+        // [boolean] pause a playing slideshow on hover
+      restartDelay: 2500 },
+        // [number] restart delay on inactive slideshow
+      animationStart: function(current){
+$('.caption').animate({
+bottom:-35
+},100);
+if (window.console && console.log) {
+// example return of current slide number
+console.log('animationStart on slide: ', current);
+};
+},
+animationComplete: function(current){
+$('.caption').animate({
+bottom:0
+},200);
+if (window.console && console.log) {
+// example return of current slide number
+console.log('animationComplete on slide: ', current);
+};
+},
+slidesLoaded: function() {
+$('.caption').animate({
+bottom:0
+},200);
+}
+  });
+}); 
+    </script>
+    <div id="slides">
+        {% for slide in slides %}
+            <div class="slide">
+            {% if slide.image %}
+                <img src="{% get_media_prefix %}{{ slide.image }}">
+                {% if captions and slide.description %}
+                <div class="caption">
+                    <p>{{ slide.description|safe }}</p>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="text">
+                    <h1>{{ slide.title }}</h1>
+                    {{ slide.description|safe }}
+                </div>
+            {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>There are no slides in this slideshow</p>
+{% endif %}

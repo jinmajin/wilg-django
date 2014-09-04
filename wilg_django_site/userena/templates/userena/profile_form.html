@@ -1,0 +1,78 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Account setup" %}{% endblock %}
+
+{% block main_content %}
+
+    {% block profile_navigation %}
+      {% comment %}Dirty hack. Will use django-guardian in the future.{% endcomment %}
+      {% if user.username == profile.user.username %}
+        <ul id="box-nav">
+          {% block profile_navigation_items %}
+	  {% include 'userena/profile_nav.html' %}
+          {% endblock %}
+        </ul>
+      {% endif %}
+    {% endblock %}
+<form action="" enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <h2>General information</h2>
+    {{ form.as_p }}
+    
+    <h2>MIT degrees</h2>
+    <div id="major" class="nested">
+      {% for form in major_formset.forms %}
+      <div class="profile_form">
+	{{ form.as_p }}
+      </div>
+      {% endfor %}
+      {{major_formset.management_form}}
+    </div>
+
+    <h2>MIT minors & concentrations</h2>
+    <div id="minor" class="nested">
+      {% for form in minor_formset.forms %}
+      <div class="profile_form">
+	{{ form.as_p }}
+      </div>
+      {% endfor %}
+      {{minor_formset.management_form}}
+    </div>
+
+    <h2>WILG exec positions</h2>
+    <div id="exec" class="nested">
+      {% for form in exec_formset.forms %}
+      <div class="profile_form">
+	{{ form.as_p }}
+      </div>
+      {% endfor %}
+      {{exec_formset.management_form}}
+    </div>
+
+    <h2>Locations lived</h2>
+    <div id="locations" class="nested">
+      {% for form in location_formset.forms %}
+      <div class="profile_form">
+      {{ form.as_p }}
+      </div>
+      {% endfor %}
+      {{location_formset.management_form}}
+    </div>
+
+    <h2>Institutional or company affiliations</h2>
+    <div id="affiliations" class="nested">
+      {% for form in affiliation_formset.forms %}
+      <div class="profile_form">
+      {{ form.as_p }}
+      </div>
+      {% endfor %}
+      {{affiliation_formset.management_form}}
+    </div>
+
+  </fieldset>
+  <input type="submit" value="{% trans "Save changes" %}" />
+</form>
+{% endblock %}

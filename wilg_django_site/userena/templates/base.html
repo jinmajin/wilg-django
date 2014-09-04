@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{STATIC_URL}}css/normalize.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}css/main.css">
+  <script src="{{STATIC_URL}}js/vendor/modernizr-2.6.2.min.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  {% block meta %}{% endblock %}
+</head>
+<body id="{% block body_id %}{% endblock %}" class="{% block body_class %}{% endblock %}">
+  <div id="body">
+    {% block content %}
+      <div id="content_title">
+        {% block title %}{% endblock %}
+      </div>
+      <div id="main_content">
+        {% block main_content %}{% endblock %}
+      </div>
+    {% endblock %}
+  </div>
+</body>
+</html>

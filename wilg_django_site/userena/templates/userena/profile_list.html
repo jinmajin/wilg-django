@@ -1,0 +1,46 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+
+
+{% block main_content %}
+{% include 'userena/profile_nav.html' %}
+{% regroup object_list|dictsort:"user.last_name"|dictsort:"year" by year as member_list %}
+{% for year in member_list reversed %}
+<ul id="profile_list">
+<span class="year_header">Class of {{ year.grouper }}</span><br/>
+  {% for profile in year.list %}
+  <a href="{% url 'userena_profile_detail' profile.user.username %}">
+  <li>
+    <img src="{{ profile.get_mugshot_url }}" /><br/><br/>
+  {{ profile.user.first_name }} {{profile.user.last_name}}<br/>
+  {% if profile.major_set.exists %}
+    Course {% for major in profile.get_bs_set %}
+        {{major.number}}{% if major.modifier %}-{{major.modifier}}{% endif %} 
+        {% if not forloop.last %} & {% endif %} 
+  {% endfor %}{% endif %}<br/>
+  </li></a>
+  {% endfor %}
+
+</ul>
+{% endfor %}
+{% if is_paginated %}
+<div class="pagination">
+  <span class="step-links">
+    {% if page_obj.has_previous %}
+    <a href="{% url 'userena_profile_list_paginated' page_obj.previous_page_number %}">{% trans 'previous' %}</a>
+    {% endif %}
+
+    <span class="current">
+      {% blocktrans with page_obj.number as page and page_obj.paginator.num_pages as num_pages %}
+      Page {{ page }} of {{ num_pages }}
+      {% endblocktrans %}
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="{% url 'userena_profile_list_paginated'  page_obj.next_page_number %}">{% trans 'next' %}</a>
+    {% endif %}
+  </span>
+</div>
+{% endif %}
+{% endblock %}
